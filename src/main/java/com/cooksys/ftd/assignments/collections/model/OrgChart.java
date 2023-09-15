@@ -1,11 +1,6 @@
 package com.cooksys.ftd.assignments.collections.model;
 
-import com.cooksys.ftd.assignments.collections.util.MissingImplementationException;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class OrgChart {
 
@@ -70,7 +65,7 @@ public class OrgChart {
      * @return true if the {@code Employee} has been added to the {@code OrgChart}, false otherwise
      */
     public boolean hasEmployee(Employee employee) {
-        throw new MissingImplementationException();
+        return orgChart.contains(employee);
     }
 
     /**
@@ -84,7 +79,7 @@ public class OrgChart {
      *         been added to the {@code OrgChart}
      */
     public Set<Employee> getAllEmployees() {
-        throw new MissingImplementationException();
+        return new HashSet<>(orgChart);
     }
 
     /**
@@ -98,7 +93,13 @@ public class OrgChart {
      *         have been added to the {@code OrgChart}
      */
     public Set<Manager> getAllManagers() {
-        throw new MissingImplementationException();
+        Set<Manager> managerSet = new HashSet<>();
+        for (Employee emp : orgChart) {
+            if (emp instanceof Manager) {
+                managerSet.add((Manager) emp);
+            }
+        }
+        return managerSet;
     }
 
     /**
@@ -119,7 +120,14 @@ public class OrgChart {
      *         or if there are no subordinates for the given {@code Manager}
      */
     public Set<Employee> getDirectSubordinates(Manager manager) {
-        throw new MissingImplementationException();
+        Set<Employee> subordinates = new HashSet<>();
+
+        for (Employee emp : orgChart) {
+            if (emp.getManager() == manager) {
+                subordinates.add(emp);
+            }
+        }
+        return subordinates;
     }
 
     /**
@@ -139,7 +147,11 @@ public class OrgChart {
      *         associated {@code Manager}, or an empty map if the {@code OrgChart} is empty.
      */
     public Map<Manager, Set<Employee>> getFullHierarchy() {
-        throw new MissingImplementationException();
+        Map<Manager, Set<Employee>> hierarchy = new HashMap<>();
+        for (Manager m : getAllManagers()) {
+            hierarchy.put(m, getDirectSubordinates(m));
+        }
+        return hierarchy;
     }
 
     @Override
