@@ -1,8 +1,8 @@
 package com.cooksys.ftd.assignments.collections.model;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.cooksys.ftd.assignments.collections.util.MissingImplementationException;
+import java.util.Objects;
 
 /**
  * TODO: Implement this class
@@ -15,13 +15,16 @@ public class Manager implements Employee {
 
     // TODO: Does this class need private fields? If so, add them here
 
+    private Manager manager;
+    private String name;
+
     /**
      * TODO: Implement this constructor.
      *
      * @param name the name of the manager to be created
      */
     public Manager(String name) {
-        throw new MissingImplementationException();
+        this.name = name;
     }
 
     /**
@@ -31,7 +34,8 @@ public class Manager implements Employee {
      * @param manager the direct manager of the manager to be created
      */
     public Manager(String name, Manager manager) {
-        throw new MissingImplementationException();
+        this.name = name;
+        this.manager = manager;
     }
 
     /**
@@ -41,7 +45,7 @@ public class Manager implements Employee {
      */
     @Override
     public String getName() {
-        throw new MissingImplementationException();
+        return name;
     }
 
     /**
@@ -51,7 +55,7 @@ public class Manager implements Employee {
      */
     @Override
     public boolean hasManager() {
-        throw new MissingImplementationException();
+        return manager != null;
     }
 
     /**
@@ -61,7 +65,10 @@ public class Manager implements Employee {
      */
     @Override
     public Manager getManager() {
-        throw new MissingImplementationException();
+        if (hasManager()) {
+            return manager;
+        }
+        return null;
     }
 
     /**
@@ -79,11 +86,30 @@ public class Manager implements Employee {
      */
     @Override
     public List<Manager> getChainOfCommand() {
-        throw new MissingImplementationException();
+        List<Manager> managerList = new ArrayList<>();
+        Manager currentManager = this.manager;
+
+        while (currentManager != null) {
+            managerList.add(currentManager);
+            currentManager = currentManager.manager;
+        }
+        return managerList;
     }
 
     // TODO: Does this class need custom .equals() and .hashcode() methods? If so, implement them here.
 
     // TODO [OPTIONAL]: Consider adding a custom .toString() method here if you want to debug your code with System.out.println() statements
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Manager manager1 = (Manager) o;
+        return Objects.equals(manager, manager1.manager) && Objects.equals(name, manager1.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(manager, name);
+    }
 }
